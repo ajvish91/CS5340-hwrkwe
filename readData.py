@@ -7,10 +7,8 @@ from seqlearn.datasets import load_conll
 from seqlearn.hmm import MultinomialHMM
 from seqlearn.evaluation import bio_f_score
 
-# The feature extractor: So far does nothing but splits the pixels of the
-# image by spaces
 
-
+# Recursively extracts filenames from a directory and its subdirectory
 def list_files(dir):
     r = []
     subdirs = [x[0] for x in os.walk(dir)]
@@ -21,7 +19,7 @@ def list_files(dir):
                 r.append(subdir + "/" + file)
     return r
 
-
+# Gets the features from test.txt
 def features(sequence, i):
     split_sequence = sequence[i].split(" ")
     # print i
@@ -29,8 +27,11 @@ def features(sequence, i):
     yield str(sequence)
 
 
+# An image directory
 IMAGE_DIRECTORY = "Datasets/sentences/a01/a01-000x/"
 my_images = []
+
+
 # Reads image from dataset and stores it as a numpy array
 for i in range(0, 2):
     for j in range(0, 3):
@@ -61,9 +62,14 @@ print jpgfile.info["Description"]
 # Gets the text corresponding to the file a01-000u-s00-00.png
 sentence = myxml.find("handwritten-part")[0].attrib["text"]
 
+# Gets <lines from the xml
 lines = myxml.findall("./handwritten-part/line")
+# Initialize image iterator
 i = 0
+
+# Maps the line to a word
 line_mapping = [[], [], [], [], [], [], [], [], []]
+
 for line in lines:
     lower = line.find("./lower-contour")
     upper = line.find("./upper-contour")
@@ -72,11 +78,13 @@ for line in lines:
     x1 = []
     x2 = []
     if lower is not None:
+	#get lower contour values
         for point in lower.findall("./point"):
             x1.append(int(point.attrib["x"]))
     if upper is not None:
         for point in upper.findall("./point"):
             x2.append(int(point.attrib["x"]))
+    # Get words in a line
     words = line.findall("./word")
     for word in words:
         print "The Word: ****", word.attrib["text"], "****"
@@ -94,16 +102,9 @@ for line in lines:
             offset = x - x1[0]
         if offset <= 0:
             offset = 0
-        # if my_image.shape[1] < offset:
-        #     offset = offset - my_image.shape[1]
-        #     i += 1
-        #     my_image = my_images[i]
         print "offset ", offset
         word_image = my_image[
             :, offset:offset + word_width]
-        # print word_image.shape
-        # if word_image.shape[1] == 0:
-        #     print "EMPTYYYYYYYYYYYYYYYYYYYY"
         my_word = {
             "matrix": word_image,
             "word": word.attrib["text"]
@@ -115,6 +116,7 @@ for line in lines:
         #             my_word["matrix"] * 255)
         print my_word["matrix"].shape
     print '\n'
+    # Go to the next image
     i += 1
 
 
