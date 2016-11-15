@@ -2,11 +2,13 @@ import cv2
 import preprocess
 import segmentbeautify
 import xmloperations
+import hmm
 from os import listdir
 from os.path import isfile, join
-
+'''
+words_hmm = []
 filepath = "Datasets/formsA-D/"
-
+i = 0
 onlyfiles = [f for f in listdir(
     filepath) if isfile(join(filepath, f))]
 for file in onlyfiles:
@@ -31,6 +33,15 @@ for file in onlyfiles:
     # cv2.imshow("Edge image", edge_image)
 
     img = preprocess.detectSkew(img)
-    img = segmentbeautify.verticalProfileProjection(img, file, lines)
-    cv2.waitKey(100000)
-    break
+    words_hmm = words_hmm + segmentbeautify.extractLines(img, file, lines)
+    # cv2.waitKey(100000)
+    # i += 1
+    # if i == 3:
+    #     break
+
+hmm.createTXT(words_hmm)'''
+print "written"
+clf = hmm.trainHMM(0.8)
+print "trained"
+hmm.testHMM(clf)
+print "tested"
