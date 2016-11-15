@@ -7,8 +7,10 @@ import numpy as np
 # Gets the features from test.txt
 def features(sequence, i):
     split_sequence = sequence[i].split(" ")
-    print sequence, i
-    yield str(sequence)
+    # print sequence[i], i
+    for ele in (split_sequence):
+        yield ele
+    # yield sequence[i]
 
 
 def createTXT(words):
@@ -23,21 +25,21 @@ def createTXT(words):
     return "test.txt"
 
 
-def trainHMM(perc):
+def trainHMM(data):
     # # Extracts features from the datasets
-    X_train, y_train, lengths_train = load_conll("test.txt", features)
+    X_train, y_train, lengths_train = load_conll(data, features)
 
     # # Models it as an HMM
-    clf = MultinomialHMM()
+    clf = MultinomialHMM(decode='viterbi', alpha=0.2)
     clf.fit(X_train, y_train, lengths_train)
 
     # print X_train, y_train
     return clf
 
 
-def testHMM(clf):
+def testHMM(clf, data):
     # Validation after training
-    X_test, y_test, lengths_test = load_conll("test.txt", features)
+    X_test, y_test, lengths_test = load_conll(data, features)
     y_pred = clf.predict(X_test, lengths_test)
 
     print y_pred

@@ -5,7 +5,7 @@ import xmloperations
 import hmm
 from os import listdir
 from os.path import isfile, join
-'''
+
 words_hmm = []
 filepath = "Datasets/formsA-D/"
 i = 0
@@ -35,13 +35,13 @@ for file in onlyfiles:
     img = preprocess.detectSkew(img)
     words_hmm = words_hmm + segmentbeautify.extractLines(img, file, lines)
     # cv2.waitKey(100000)
-    # i += 1
-    # if i == 3:
-    #     break
+    i += 1
+    if 0.2 * len(onlyfiles) < i:
+        break
 
-hmm.createTXT(words_hmm)'''
+hmm.createTXT(words_hmm)
 print "written"
-clf = hmm.trainHMM(0.8)
+clf = hmm.trainHMM("test.txt")
 print "trained"
-hmm.testHMM(clf)
+hmm.testHMM(clf, "test.txt")
 print "tested"
