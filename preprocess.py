@@ -23,6 +23,24 @@ def detectEdge(img):
     return img
 
 
+def equalize(img):
+    return cv2.equalizeHist(img)
+
+
+def thinLines(img):
+    return cv2.erode(img, np.ones((3, 3), np.uint8), iterations=3)
+
+
+def sharpen(img):
+    frame = cv2.GaussianBlur(img, (5, 5), 3)
+    img = cv2.addWeighted(img, 1.5, frame, -0.5, 0, frame)
+    return frame
+
+
+def resizeImage(img):
+    return cv2.resize(img, (75 * img.shape[1] / img.shape[0], 75))
+
+
 def samplePage(img):
     page_width = img.shape[1]
     page_offset = 700

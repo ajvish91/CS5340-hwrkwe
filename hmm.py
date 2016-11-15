@@ -26,11 +26,10 @@ def createTXT(words):
 
 
 def trainHMM(data):
-    # # Extracts features from the datasets
-    X_train, y_train, lengths_train = load_conll(data, features)
-
+    # # # Extracts features from the datasets
+    # X_train, y_train, lengths_train = load_conll(data, features)
     # # Models it as an HMM
-    clf = MultinomialHMM(decode='viterbi', alpha=0.2)
+    clf = MultinomialHMM()
     clf.fit(X_train, y_train, lengths_train)
 
     # print X_train, y_train
